@@ -10,19 +10,19 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/poll-dashboard.js',
-                'resources/js/poll-dashboard-integrated.js',
             ],
             refresh: true,
         }),
         tailwindcss(),
     ],
+    resolve: {
+        alias: {
+            '@': '/resources/js',
+        },
+    },
     server: {
         host: true,
-        hmr: {
-            host: 'localhost'
-        },
-        watch: {
-            ignored: ['**/storage/framework/views/**'],
-        },
+        hmr: { host: 'localhost' },
+        watch: { ignored: ['**/storage/framework/views/**'] },
     },
 });

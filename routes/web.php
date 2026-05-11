@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\PollDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokenController;
+use App\Http\Controllers\PollVoteController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/login', 'showLogin')->name('login');
     Route::post('/auth/login', 'login');
 });
+
+Route::get('/polls/{token}', PollVoteController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/polls/dashboard', PollDashboardController::class)->name('polls.dashboard');
