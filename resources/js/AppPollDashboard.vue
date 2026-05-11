@@ -48,7 +48,7 @@ async function onDelete(id) {
     try {
         await deletePoll(id);
         notify('Sondage supprimé.');
-    } catch {
+} catch (e) {
         notify('Erreur lors de la suppression.', 'error');
     }
 }
@@ -60,7 +60,7 @@ function onCopyLink(poll) {
 
 async function onFormSubmit(data) {
     try {
-        if (view.value === 'create') {
+        if (view.value==="create") {
             await createPoll(data);
             notify('Sondage créé !');
         } else {
@@ -69,8 +69,8 @@ async function onFormSubmit(data) {
         }
         view.value = 'list';
         editTarget.value = null;
-    } catch {
-        notify('Une erreur est survenue.', 'error');
+} catch (e) {
+        notify(e?.data?.message || 'Une erreur est survenue.', 'error');
     }
 }
 

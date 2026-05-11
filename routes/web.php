@@ -5,15 +5,16 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PollDashboardController;
+use App\Http\Controllers\PollVoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokenController;
-use App\Http\Controllers\PollVoteController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
+// ── Pages publiques ──────────────────────────────────────────────────────────
+
 Route::get('/', function () {
     $posts = Post::orderBy('created_at', 'desc')->with('user')->with('likes')->limit(3)->get();
-
     return view('home', ['posts' => $posts]);
 });
 
@@ -21,9 +22,12 @@ Route::get('/about', function () {
     return view('about');
 });
 
-Route::get('/@{username}', [ProfileController::class, 'show'])->where('username', '[A-Za-z0-9-_]+');
+Route::get('/@{username}', [ProfileController::class, 'show'])
+    ->where('username', '[A-Za-z0-9-_]+');
 
 Route::resource('posts', PostController::class)->only(['index', 'show']);
+
+// ── Authentification ─────────────────────────────────────────────────────────
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/register', 'showRegister');
@@ -32,13 +36,20 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/auth/login', 'login');
 });
 
-Route::get('/polls/{token}', PollVoteController::class);
+// ── Pages protégées (auth requise) ───────────────────────────────────────────
 
 Route::middleware('auth')->group(function () {
+    // Sondages - dashboard AVANT la route /polls/{token} pour éviter le conflit
     Route::get('/polls/dashboard', PollDashboardController::class)->name('polls.dashboard');
+
     Route::resource('posts', PostController::class)->except(['index', 'show']);
     Route::singleton('my-profile', MyProfileController::class)->destroyable();
     Route::match(['put', 'patch'], '/likes/{post}', [LikeController::class, 'update']);
     Route::resource('tokens', TokenController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 });
+
+// ── Page de vote (publique, après /polls/dashboard) ──────────────────────────
+// Doit être déclarée APRÈS /polls/dashboard pour éviter que "dashboard"
+// soit interprété comme un token de sondage.
+Route::get('/polls/{token}', PollVoteController::class);

@@ -36,6 +36,13 @@
                 </div>
 
                 @auth
+                    <a href="{{ url('/polls/dashboard') }}"
+                        class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800">
+                        Sondages
+                    </a>
+                @endauth
+
+                @auth
                     <a href="{{ url('/my-profile') }}" class="block hover:opacity-80 transition">
                         <div
                             class="h-8 w-8 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
