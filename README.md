@@ -74,4 +74,41 @@ Pour développer et tester le mini-projet en local, voici les étapes à suivre 
     composer run dev
     ```
 
-L'application sera accessible à l'adresse <http://localhost:8000>.
+L'application sera accessible à l'adresse <http://127.0.0.1:8000>.
+
+## Système de sondages
+
+Ce projet inclut un système de sondages complet développé avec Vue.js 3 et Laravel 12.
+
+### Fonctionnalités
+
+- Création, édition et suppression de sondages
+- Gestion des options de réponse
+- Paramètres configurables : brouillon, choix multiples, résultats publics, durée
+- Lien de partage avec token unique
+- Vote avec unicité garantie (côté frontend et API)
+- Résultats en temps réel via polling (toutes les 5 secondes)
+- Graphique à barres des résultats
+- Accès anonyme aux résultats si publics
+- Modification du vote si autorisée par le créateur
+
+### Architecture frontend
+
+Deux applications Vue.js distinctes :
+- **Dashboard** (`/polls/dashboard`) — gestion des sondages, réservé aux utilisateurs connectés
+- **Page de vote** (`/polls/{token}`) — voter et consulter les résultats, accessible publiquement
+
+### Comptes de test
+
+Après `php artisan db:seed` :
+
+| Email                | Mot de passe |
+|----------------------|--------------|
+| john.doe@example.com | password     |
+| jane.doe@example.com | password     |
+
+### Stack technique
+
+- Backend : Laravel 12 + Sanctum (authentification par cookie de session)
+- Frontend : Vue.js 3 + Vite + Tailwind CSS 4
+- Base de données : SQLite

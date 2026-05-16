@@ -25,22 +25,22 @@
     <header class="bg-teal-600 text-white dark:bg-slate-800">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="h-16 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <a href="{{ url('/') }}" class="block hover:opacity-80 transition">
-                        {{ config('app.name') }}
+                <div class="flex items-center gap-2">
+                    <a href="{{ url('/') }}" class="block hover:opacity-80 transition font-medium">
+                        <span class="sm:hidden">MSN</span>
+                        <span class="hidden sm:block">{{ config('app.name') }}</span>
                     </a>
                     <a href="{{ url('/posts') }}"
-                        class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800">
+                        class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800 text-sm">
                         {{ __('ui.posts.index.title') }}
                     </a>
+                    @auth
+                        <a href="{{ url('/polls/dashboard') }}"
+                            class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800 text-sm">
+                            Sondages
+                        </a>
+                    @endauth
                 </div>
-
-                @auth
-                    <a href="{{ url('/polls/dashboard') }}"
-                        class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800">
-                        Sondages
-                    </a>
-                @endauth
 
                 @auth
                     <a href="{{ url('/my-profile') }}" class="block hover:opacity-80 transition">
@@ -57,11 +57,11 @@
                 @else
                     <div class="flex items-center gap-2">
                         <a href="{{ url('/auth/login') }}"
-                            class="block px-3 py-1 rounded-md hover:bg-teal-700 dark:hover:bg-slate-700 transition">
+                            class="block px-3 py-1 rounded-md hover:bg-teal-700 dark:hover:bg-slate-700 transition text-sm">
                             {{ __('ui.auth.login.title') }}
                         </a>
                         <a href="{{ url('/auth/register') }}"
-                            class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800 transition">
+                            class="block bg-teal-700 dark:bg-purple-900 px-3 py-1 rounded-md hover:bg-teal-800 dark:hover:bg-purple-800 transition text-sm">
                             {{ __('ui.auth.register.title') }}
                         </a>
                     </div>

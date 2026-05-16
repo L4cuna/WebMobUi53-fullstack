@@ -35,9 +35,10 @@ onMounted(loadPoll);
 // rafraîchit les résultats toutes les 5s — le composable gère clearInterval automatiquement
 usePolling(loadPoll, 5000);
 
-const isExpired = computed(() =>
-    poll.value?.ends_at && new Date(poll.value.ends_at) < new Date()
-);
+const isExpired = computed(() => {
+    if (! poll.value?.ends_at) return false;
+    return new Date(poll.value.ends_at + 'Z') < new Date();
+});
 
 const canVote = computed(() => {
     if (! poll.value || ! props.isAuthenticated) return false;
@@ -128,7 +129,7 @@ function percent(option) {
                         </span>
                         <span v-if="poll.ends_at && !isExpired"
                             class="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">
-                            Fin : {{ new Date(poll.ends_at).toLocaleString('fr-CH') }}
+                            Fin : {{ new Date(poll.ends_at + 'Z').toLocaleString('fr-CH') }}
                         </span>
                         <span v-if="poll.allow_multiple_choices"
                             class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-600">

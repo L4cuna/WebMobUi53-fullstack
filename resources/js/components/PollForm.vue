@@ -2,12 +2,6 @@
 /**
  * Formulaire de création ET d'édition d'un sondage.
  * Réutilisable : si `poll` est fourni → mode édition, sinon → mode création.
- *
- * Concepts utilisés :
- * - defineProps : reçoit un sondage existant du parent (optionnel)
- * - defineEmits : émet 'submit' avec les données ou 'cancel'
- * - ref() : état local réactif pour chaque champ du formulaire
- * - computed() : label du bouton calculé selon le mode
  */
 
 import { ref, computed } from 'vue';
@@ -24,15 +18,13 @@ const question = ref(props.poll?.question ?? '');
 // Les options sont des chaînes simples dans le formulaire
 const options  = ref(props.poll?.options?.map(o => o.label) ?? ['', '']);
 
-const is_draft               = ref(props.poll?.is_draft ?? true);
-const allow_multiple_choices = ref(props.poll?.allow_multiple_choices ?? false);
-const allow_vote_change      = ref(props.poll?.allow_vote_change ?? false);
-const results_public         = ref(props.poll?.results_public ?? false);
+const is_draft               = ref(!!(props.poll?.is_draft ?? true));
+const allow_multiple_choices = ref(!!(props.poll?.allow_multiple_choices ?? false));
+const allow_vote_change      = ref(!!(props.poll?.allow_vote_change ?? false));
+const results_public         = ref(!!(props.poll?.results_public ?? false));
 // On stocke la durée en minutes dans le formulaire, l'API reçoit des secondes
 const durationMinutes = ref(props.poll?.duration ? Math.round(props.poll.duration / 60) : null);
 
-// computed() : valeur dérivée qui se recalcule si props.poll change
-// Ici c'est le bon outil car on veut juste lire une valeur (pas d'effet de bord)
 const isEditMode  = computed(() => props.poll !== null);
 const submitLabel = computed(() => isEditMode.value ? 'Enregistrer' : 'Créer');
 
